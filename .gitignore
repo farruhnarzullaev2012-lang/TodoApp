@@ -1,0 +1,10 @@
+build/
+.gradle/
+*.apk
+local.properties
+.idea/
+node_modules/
+backend/data/
+*.log
+.DS_Store
+*.db
