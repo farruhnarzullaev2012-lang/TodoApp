@@ -2,6 +2,9 @@ package com.example.todoapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,7 +29,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    TaskListScreen()
+                    // Oddiy navigatsiya: "tasks" <-> "profile"
+                    var screen by rememberSaveable { mutableStateOf("tasks") }
+                    when (screen) {
+                        "profile" -> {
+                            BackHandler { screen = "tasks" }
+                            ProfileScreen(onBack = { screen = "tasks" })
+                        }
+                        else -> TaskListScreen(onOpenProfile = { screen = "profile" })
+                    }
                 }
             }
         }
@@ -35,7 +46,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskListScreen() {
+fun TaskListScreen(onOpenProfile: () -> Unit = {}) {
     val tasks = remember { mutableStateListOf<Task>() }
     var inputText by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(true) }
@@ -64,9 +75,15 @@ fun TaskListScreen() {
         topBar = {
             TopAppBar(
                 title = { Text("Vazifalar", fontWeight = FontWeight.Bold) },
+                actions = {
+                    IconButton(onClick = onOpenProfile) {
+                        Icon(Icons.Default.AccountCircle, contentDescription = "Profil")
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = Color.White
+                    titleContentColor = Color.White,
+                    actionIconContentColor = Color.White
                 )
             )
         }
