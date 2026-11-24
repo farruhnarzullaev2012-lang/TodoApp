@@ -28,9 +28,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
+            var darkTheme by rememberSaveable { mutableStateOf(false) }
+            MaterialTheme(colorScheme = if (darkTheme) darkColorScheme() else lightColorScheme()) {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    // Oddiy navigatsiya: login -> tasks -> profile / stats
+                    // Навигация: login -> tasks -> profile (-> settings) / stats
                     var screen by rememberSaveable { mutableStateOf("login") }
                     var userEmail by rememberSaveable { mutableStateOf("") }
                     when (screen) {
@@ -44,7 +45,16 @@ class MainActivity : ComponentActivity() {
                                 name = userEmail.substringBefore("@").replaceFirstChar { it.uppercase() },
                                 email = userEmail,
                                 onBack = { screen = "tasks" },
+                                onSettings = { screen = "settings" },
                                 onLogout = { userEmail = ""; screen = "login" }
+                            )
+                        }
+                        "settings" -> {
+                            BackHandler { screen = "profile" }
+                            SettingsScreen(
+                                darkTheme = darkTheme,
+                                onDarkThemeChange = { darkTheme = it },
+                                onBack = { screen = "profile" }
                             )
                         }
                         "stats" -> {
