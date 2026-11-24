@@ -25,11 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 // Profil ekrani — chizmadagi joylashuv bo'yicha:
-// sarlavha + orqaga, rasm (avatar), Ism Familiya, email, 3 ta menyu qatori, pastda "Tahrirlash" tugmasi
+// sarlavha + orqaga, rasm (avatar), Ism Familiya, email, 3 ta menyu qatori, pastda "Редактировать" tugmasi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    name: String = "Ism Familiya",
+    name: String = "Имя Фамилия",
     email: String = "email@mail.com",
     onBack: () -> Unit,
     onSettings: () -> Unit = {},
@@ -40,10 +40,10 @@ fun ProfileScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Profil", fontWeight = FontWeight.Bold) },
+                title = { Text("Профиль", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Orqaga")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")
                     }
                 }
             )
@@ -70,7 +70,7 @@ fun ProfileScreen(
             ) {
                 Icon(
                     Icons.Default.Person,
-                    contentDescription = "Rasm",
+                    contentDescription = "Фото",
                     modifier = Modifier.size(64.dp),
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -84,13 +84,13 @@ fun ProfileScreen(
             HorizontalDivider()
             Spacer(Modifier.height(8.dp))
 
-            ProfileMenuItem(Icons.Default.Settings, "Sozlamalar", onSettings)
-            ProfileMenuItem(Icons.Default.Notifications, "Bildirishnomalar", onNotifications)
-            ProfileMenuItem(Icons.AutoMirrored.Filled.ExitToApp, "Chiqish", onLogout)
+            ProfileMenuItem(Icons.Default.Settings, "Настройки", onSettings)
+            ProfileMenuItem(Icons.Default.Notifications, "Уведомления", onNotifications)
+            ProfileMenuItem(Icons.AutoMirrored.Filled.ExitToApp, "Выйти", onLogout)
 
             Spacer(Modifier.weight(1f))
 
-            // "Tahrirlash" tugmasi
+            // "Редактировать" tugmasi
             OutlinedButton(
                 onClick = onEdit,
                 shape = RoundedCornerShape(14.dp),
@@ -99,7 +99,7 @@ fun ProfileScreen(
                     .fillMaxWidth()
                     .height(52.dp)
             ) {
-                Text("Tahrirlash", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                Text("Редактировать", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
             }
         }
     }

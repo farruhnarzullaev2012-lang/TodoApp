@@ -24,17 +24,17 @@ fun StatsScreen(onBack: () -> Unit) {
         try {
             tasks = RetrofitClient.api.getTasks()
         } catch (e: Exception) {
-            error = "Serverga ulanishda xato: ${e.message}"
+            error = "Ошибка подключения к серверу: ${e.message}"
         }
     }
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Statistika", fontWeight = FontWeight.Bold) },
+                title = { Text("Статистика", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Orqaga")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")
                     }
                 }
             )
@@ -57,7 +57,7 @@ fun StatsScreen(onBack: () -> Unit) {
                     val left = total - done
                     val percent = if (total == 0) 0f else done.toFloat() / total
 
-                    Text("Bajarilish darajasi", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                    Text("Прогресс выполнения", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
                     Spacer(Modifier.height(12.dp))
                     LinearProgressIndicator(
                         progress = { percent },
@@ -69,9 +69,9 @@ fun StatsScreen(onBack: () -> Unit) {
 
                     Spacer(Modifier.height(24.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
-                        StatCard("Jami", total, MaterialTheme.colorScheme.primary, Modifier.weight(1f))
-                        StatCard("Bajarilgan", done, Color(0xFF2E7D32), Modifier.weight(1f))
-                        StatCard("Qolgan", left, Color(0xFFE65100), Modifier.weight(1f))
+                        StatCard("Всего", total, MaterialTheme.colorScheme.primary, Modifier.weight(1f))
+                        StatCard("Выполнено", done, Color(0xFF2E7D32), Modifier.weight(1f))
+                        StatCard("Осталось", left, Color(0xFFE65100), Modifier.weight(1f))
                     }
                 }
             }

@@ -18,7 +18,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// Login ekrani: email + parol, oddiy tekshiruv, "Kirish" tugmasi.
+// Login ekrani: email + parol, oddiy tekshiruv, "Войти" tugmasi.
 // Hozircha server autentifikatsiyasi yo'q — to'g'ri formatdagi ma'lumot bilan kiradi.
 @Composable
 fun LoginScreen(onLogin: (email: String) -> Unit) {
@@ -41,8 +41,8 @@ fun LoginScreen(onLogin: (email: String) -> Unit) {
             modifier = Modifier.size(72.dp)
         )
         Spacer(Modifier.height(12.dp))
-        Text("Vazifalar", fontSize = 28.sp, fontWeight = FontWeight.Bold)
-        Text("Hisobingizga kiring", color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text("Задачи", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+        Text("Войдите в аккаунт", color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.height(32.dp))
 
         OutlinedTextField(
@@ -58,7 +58,7 @@ fun LoginScreen(onLogin: (email: String) -> Unit) {
         OutlinedTextField(
             value = password,
             onValueChange = { password = it; error = null },
-            label = { Text("Parol") },
+            label = { Text("Пароль") },
             singleLine = true,
             visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -66,7 +66,7 @@ fun LoginScreen(onLogin: (email: String) -> Unit) {
                 IconButton(onClick = { showPassword = !showPassword }) {
                     Icon(
                         if (showPassword) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                        contentDescription = "Parolni ko'rsatish"
+                        contentDescription = "Показать пароль"
                     )
                 }
             },
@@ -83,8 +83,8 @@ fun LoginScreen(onLogin: (email: String) -> Unit) {
         Button(
             onClick = {
                 error = when {
-                    !email.contains("@") || !email.contains(".") -> "Email noto'g'ri"
-                    password.length < 4 -> "Parol kamida 4 ta belgi bo'lsin"
+                    !email.contains("@") || !email.contains(".") -> "Неверный email"
+                    password.length < 4 -> "Пароль должен быть не короче 4 символов"
                     else -> null
                 }
                 if (error == null) onLogin(email.trim())
@@ -94,7 +94,7 @@ fun LoginScreen(onLogin: (email: String) -> Unit) {
                 .fillMaxWidth()
                 .height(52.dp)
         ) {
-            Text("Kirish", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+            Text("Войти", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
         }
     }
 }

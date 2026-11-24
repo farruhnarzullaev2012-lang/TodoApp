@@ -79,7 +79,7 @@ fun TaskListScreen(onOpenProfile: () -> Unit = {}, onOpenStats: () -> Unit = {})
             tasks.addAll(result)
             errorMessage = null
         } catch (e: Exception) {
-            errorMessage = "Serverga ulanishda xato: ${e.message}"
+            errorMessage = "Ошибка подключения к серверу: ${e.message}"
         }
     }
 
@@ -92,13 +92,13 @@ fun TaskListScreen(onOpenProfile: () -> Unit = {}, onOpenStats: () -> Unit = {})
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Vazifalar", fontWeight = FontWeight.Bold) },
+                title = { Text("Задачи", fontWeight = FontWeight.Bold) },
                 actions = {
                     IconButton(onClick = onOpenStats) {
-                        Icon(Icons.Default.BarChart, contentDescription = "Statistika")
+                        Icon(Icons.Default.BarChart, contentDescription = "Статистика")
                     }
                     IconButton(onClick = onOpenProfile) {
-                        Icon(Icons.Default.AccountCircle, contentDescription = "Profil")
+                        Icon(Icons.Default.AccountCircle, contentDescription = "Профиль")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -123,7 +123,7 @@ fun TaskListScreen(onOpenProfile: () -> Unit = {}, onOpenStats: () -> Unit = {})
                 OutlinedTextField(
                     value = inputText,
                     onValueChange = { inputText = it },
-                    label = { Text("Yangi vazifa") },
+                    label = { Text("Новая задача") },
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.weight(1f)
@@ -139,7 +139,7 @@ fun TaskListScreen(onOpenProfile: () -> Unit = {}, onOpenStats: () -> Unit = {})
                                     RetrofitClient.api.createTask(CreateTaskRequest(title))
                                     loadTasks()
                                 } catch (e: Exception) {
-                                    errorMessage = "Qo'shishda xato: ${e.message}"
+                                    errorMessage = "Ошибка при добавлении: ${e.message}"
                                 }
                             }
                         }
@@ -149,7 +149,7 @@ fun TaskListScreen(onOpenProfile: () -> Unit = {}, onOpenStats: () -> Unit = {})
                 ) {
                     Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("Qo'shish")
+                    Text("Добавить")
                 }
             }
 
@@ -169,7 +169,7 @@ fun TaskListScreen(onOpenProfile: () -> Unit = {}, onOpenStats: () -> Unit = {})
                 tasks.isEmpty() -> {
                     Box(modifier = Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
                         Text(
-                            "Hozircha vazifalar yo'q",
+                            "Пока задач нет",
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -189,7 +189,7 @@ fun TaskListScreen(onOpenProfile: () -> Unit = {}, onOpenStats: () -> Unit = {})
                                     RetrofitClient.api.updateDone(task.id, UpdateDoneRequest(newDone))
                                     loadTasks()
                                 } catch (e: Exception) {
-                                    errorMessage = "Belgilashda xato: ${e.message}"
+                                    errorMessage = "Ошибка при отметке: ${e.message}"
                                 }
                             }
                         },
@@ -199,7 +199,7 @@ fun TaskListScreen(onOpenProfile: () -> Unit = {}, onOpenStats: () -> Unit = {})
                                     RetrofitClient.api.deleteTask(task.id)
                                     loadTasks()
                                 } catch (e: Exception) {
-                                    errorMessage = "O'chirishda xato: ${e.message}"
+                                    errorMessage = "Ошибка при удалении: ${e.message}"
                                 }
                             }
                         }
@@ -236,7 +236,7 @@ fun TaskRow(task: Task, onToggleDone: () -> Unit, onDelete: () -> Unit) {
             IconButton(onClick = onDelete) {
                 Icon(
                     Icons.Default.Delete,
-                    contentDescription = "O'chirish",
+                    contentDescription = "Удалить",
                     tint = MaterialTheme.colorScheme.error
                 )
             }
