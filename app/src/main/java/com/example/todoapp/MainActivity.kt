@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.BarChart
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,14 +30,31 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    // Oddiy navigatsiya: "tasks" <-> "profile"
-                    var screen by rememberSaveable { mutableStateOf("tasks") }
+                    // Oddiy navigatsiya: login -> tasks -> profile / stats
+                    var screen by rememberSaveable { mutableStateOf("login") }
+                    var userEmail by rememberSaveable { mutableStateOf("") }
                     when (screen) {
+                        "login" -> LoginScreen(onLogin = { email ->
+                            userEmail = email
+                            screen = "tasks"
+                        })
                         "profile" -> {
                             BackHandler { screen = "tasks" }
-                            ProfileScreen(onBack = { screen = "tasks" })
+                            ProfileScreen(
+                                name = userEmail.substringBefore("@").replaceFirstChar { it.uppercase() },
+                                email = userEmail,
+                                onBack = { screen = "tasks" },
+                                onLogout = { userEmail = ""; screen = "login" }
+                            )
                         }
-                        else -> TaskListScreen(onOpenProfile = { screen = "profile" })
+                        "stats" -> {
+                            BackHandler { screen = "tasks" }
+                            StatsScreen(onBack = { screen = "tasks" })
+                        }
+                        else -> TaskListScreen(
+                            onOpenProfile = { screen = "profile" },
+                            onOpenStats = { screen = "stats" }
+                        )
                     }
                 }
             }
@@ -46,7 +64,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskListScreen(onOpenProfile: () -> Unit = {}) {
+fun TaskListScreen(onOpenProfile: () -> Unit = {}, onOpenStats: () -> Unit = {}) {
     val tasks = remember { mutableStateListOf<Task>() }
     var inputText by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(true) }
@@ -76,6 +94,9 @@ fun TaskListScreen(onOpenProfile: () -> Unit = {}) {
             TopAppBar(
                 title = { Text("Vazifalar", fontWeight = FontWeight.Bold) },
                 actions = {
+                    IconButton(onClick = onOpenStats) {
+                        Icon(Icons.Default.BarChart, contentDescription = "Statistika")
+                    }
                     IconButton(onClick = onOpenProfile) {
                         Icon(Icons.Default.AccountCircle, contentDescription = "Profil")
                     }
